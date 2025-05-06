@@ -1,8 +1,10 @@
 package com.gildong.gildongE.controller;
 
-import com.gildong.gildongE.model.User;
+import com.gildong.gildongE.dto.UserRegisterRequest;
+import com.gildong.gildongE.dto.UserResponse;
 import com.gildong.gildongE.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +16,16 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.registerUser(user));
+    public ResponseEntity<UserResponse> registerUser(@RequestBody UserRegisterRequest req) {
+        UserResponse resp = userService.registerUser(req);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @GetMapping("/{loginId}")
-    public ResponseEntity<User> getUserByLoginId(@PathVariable String loginId) {
-        User user = userService.findByLoginId(loginId);
-        if (user != null) {
-            return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponse> getUserByLoginId(@PathVariable String loginId) {
+        UserResponse resp = userService.findByLoginId(loginId);
+        if (resp != null) {
+            return ResponseEntity.ok(resp);
         }
         return ResponseEntity.notFound().build();
     }

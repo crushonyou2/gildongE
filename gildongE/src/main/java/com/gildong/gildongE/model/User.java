@@ -3,6 +3,8 @@ package com.gildong.gildongE.model;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.gildong.gildongE.model.AuthProvider;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,5 +15,6 @@ public class User {
     private String userName;
     private String loginId;
     private String password;
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private AuthProvider provider;
+    private LocalDateTime createdAt;
 }

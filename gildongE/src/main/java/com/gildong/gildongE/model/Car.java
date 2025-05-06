@@ -13,5 +13,5 @@ public class Car {
     private String carNumber;
     private String modelName;
     private String userId;
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 }

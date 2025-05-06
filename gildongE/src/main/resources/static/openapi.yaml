@@ -1,0 +1,361 @@
+openapi: 3.0.0
+info:
+  title: GildongE API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+tags:
+  - name: Users
+    description: 회원 관련 API
+  - name: Cars
+    description: 차량 관련 API
+  - name: Consumables
+    description: 텔레메트리(소모품) 관련 API
+
+paths:
+  /api/users/register:
+    post:
+      tags: [Users]
+      summary: 회원 가입
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+      responses:
+        "201":
+          description: 생성 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "400":
+          description: 잘못된 요청 (유효성 실패)  # TODO
+
+  /api/users/{loginId}:
+    get:
+      tags: [Users]
+      summary: loginId로 사용자 조회
+      parameters:
+        - name: loginId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 조회할 사용자 로그인 아이디
+      responses:
+        "200":
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseWithPassword'
+        "404":
+          description: 사용자 없음  # TODO
+
+  /api/users/{userId}:
+    get:
+      tags: [Users]
+      summary: userId로 사용자 정보 조회
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 조회할 사용자 고유 ID
+      responses:
+        "200":
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "404":
+          description: 사용자 없음  # TODO
+
+    put:
+      tags: [Users]
+      summary: 사용자 정보 수정
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 수정할 사용자 고유 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        "200":
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "400":
+          description: 잘못된 요청  # TODO
+        "404":
+          description: 사용자 없음  # TODO
+
+  /api/cars:
+    post:
+      tags: [Cars]
+      summary: 차량 등록
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarRequest'
+      responses:
+        "201":
+          description: 등록 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarResponse'
+        "400":
+          description: 잘못된 요청  # TODO
+
+  /api/cars/user/{userId}:
+    get:
+      tags: [Cars]
+      summary: 사용자별 차량 목록 조회
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 조회할 사용자 고유 ID
+      responses:
+        "200":
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarResponse'
+        "404":
+          description: 사용자 없음  # TODO
+
+  /api/consumables:
+    post:
+      tags: [Consumables]
+      summary: 차량 텔레메트리(소모품) 데이터 저장
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryRequest'
+      responses:
+        "201":
+          description: 저장 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryResponse'
+        "400":
+          description: 잘못된 요청  # TODO
+
+  /api/consumables/car/{carId}:
+    get:
+      tags: [Consumables]
+      summary: 차량별 텔레메트리(소모품) 목록 조회
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 조회할 차량 고유 ID
+      responses:
+        "200":
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TelemetryResponse'
+        "404":
+          description: 차량 없음  # TODO
+
+components:
+  schemas:
+    # --- User ---
+    UserRegisterRequest:
+      type: object
+      required: [userName, loginId, password]
+      properties:
+        userName:
+          type: string
+          description: 화면에 표시될 이름
+        loginId:
+          type: string
+          description: 로그인용 아이디
+        password:
+          type: string
+          description: 비밀번호
+
+    UserUpdateRequest:
+      type: object
+      required: [userName]
+      properties:
+        userName:
+          type: string
+          description: 수정할 이름
+        password:
+          type: string
+          description: 수정할 비밀번호
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 사용자 고유 ID
+        userName:
+          type: string
+        loginId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: 생성 시각
+
+    UserResponseWithPassword:
+      allOf:
+        - $ref: '#/components/schemas/UserResponse'
+        - type: object
+          properties:
+            password:
+              type: string
+              description: 비밀번호 해시 또는 평문
+
+    # --- Car ---
+    CarRequest:
+      type: object
+      required: [userId, modelName, carNumber]
+      properties:
+        userId:
+          type: string
+          description: 소유자 사용자 고유 ID
+        modelName:
+          type: string
+          description: 차량 모델명
+        carNumber:
+          type: string
+          description: 번호판
+
+    CarResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 차량 고유 ID
+        userId:
+          type: string
+        modelName:
+          type: string
+        carNumber:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: 등록 시각
+
+    # --- Consumable(Telemetry) ---
+    TelemetryRequest:
+      type: object
+      required:
+        - carId
+        - speed
+        - engineRpm
+        - throttlePosition
+        - engineLoad
+        - fuelTankLevel
+        - coolantTemp
+        - electricalSystem
+        - problemDetected
+      properties:
+        carId:
+          type: string
+          description: 차량 고유 ID
+        speed:
+          type: number
+          format: float
+          description: 차량 속도 (km/h)
+        engineRpm:
+          type: number
+          format: float
+          description: 엔진 회전수 (RPM)
+        throttlePosition:
+          type: number
+          format: float
+          description: 스로틀 위치 (%)
+        engineLoad:
+          type: number
+          format: float
+          description: 엔진 부하 (%)
+        fuelTankLevel:
+          type: number
+          format: float
+          description: 연료 탱크 레벨 (%)
+        coolantTemp:
+          type: number
+          format: float
+          description: 냉각수 온도 (℃)
+        electricalSystem:
+          type: string
+          description: 전기 시스템 상태
+        problemDetected:
+          type: boolean
+          description: 문제 감지 여부
+
+    TelemetryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 소모품(텔레메트리) 고유 ID
+        carId:
+          type: string
+        speed:
+          type: number
+          format: float
+        engineRpm:
+          type: number
+          format: float
+        throttlePosition:
+          type: number
+          format: float
+        engineLoad:
+          type: number
+          format: float
+        fuelTankLevel:
+          type: number
+          format: float
+        coolantTemp:
+          type: number
+          format: float
+        electricalSystem:
+          type: string
+        problemDetected:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

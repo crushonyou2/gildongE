@@ -12,7 +12,7 @@ tags:
   - name: Cars
     description: 차량 관련 API
   - name: Consumables
-    description: 텔레메트리(소모품) 관련 API
+    description: 소모품(운행 데이터) 관련 API
 
 paths:
   /api/users/register:
@@ -151,20 +151,20 @@ paths:
   /api/consumables:
     post:
       tags: [Consumables]
-      summary: 차량 텔레메트리(소모품) 데이터 저장
+      summary: 차량 소모품 데이터 저장
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TelemetryRequest'
+              $ref: '#/components/schemas/ConsumableRequest'
       responses:
         "201":
           description: 저장 성공
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TelemetryResponse'
+                $ref: '#/components/schemas/ConsumableResponse'
         "400":
           description: 잘못된 요청  # TODO
 
@@ -187,7 +187,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TelemetryResponse'
+                  $ref: '#/components/schemas/ConsumableResponse'
         "404":
           description: 차량 없음  # TODO
 
@@ -207,6 +207,9 @@ components:
         password:
           type: string
           description: 비밀번호
+        provider:
+          $ref: '#/components/schemas/AuthProvider'
+          description: 로그인 방식 (기본 LOCAL)
 
     UserUpdateRequest:
       type: object
@@ -229,6 +232,9 @@ components:
           type: string
         loginId:
           type: string
+        provider:
+          $ref: '#/components/schemas/AuthProvider'
+          description: 로그인 방식
         createdAt:
           type: string
           format: date-time
@@ -242,6 +248,19 @@ components:
             password:
               type: string
               description: 비밀번호 해시 또는 평문
+            provider:
+              $ref: '#/components/schemas/AuthProvider'
+              description: 로그인 방식
+              
+    # --- AuthProvider enum 추가 ---
+    AuthProvider:
+      type: string
+      description: 로그인 방식 (LOCAL, KAKAO, NAVER 등등)
+      enum:
+        - LOCAL
+        - KAKAO
+        - GOOGLE
+        - NAVER
 
     # --- Car ---
     CarRequest:
@@ -275,8 +294,8 @@ components:
           format: date-time
           description: 등록 시각
 
-    # --- Consumable(Telemetry) ---
-    TelemetryRequest:
+    # --- Consumable ---
+    ConsumableRequest:
       type: object
       required:
         - carId
@@ -323,7 +342,7 @@ components:
           type: boolean
           description: 문제 감지 여부
 
-    TelemetryResponse:
+    ConsumableResponse:
       type: object
       properties:
         id:

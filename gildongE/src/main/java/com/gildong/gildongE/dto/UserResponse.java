@@ -7,8 +7,9 @@ import java.time.LocalDateTime;
 public class UserResponse {
     private String id;
     private String userName;
-    private String loginId;
-    private AuthProvider provider;
+    private float avgDrivingScore;
+//    private String loginId;
+//    private AuthProvider provider;
     private LocalDateTime createdAt;
 
     public UserResponse() {}
@@ -25,18 +26,20 @@ public class UserResponse {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    public String getLoginId() {
-        return loginId;
-    }
-    public void setLoginId(String loginId) {
-        this.loginId = loginId;
-    }
-    public AuthProvider getProvider() {
-        return provider;
-    }
-    public void setProvider(AuthProvider provider) {
-        this.provider = provider;
-    }
+//    public String getLoginId() {
+//        return loginId;
+//    }
+//    public void setLoginId(String loginId) {
+//        this.loginId = loginId;
+//    }
+//    public AuthProvider getProvider() {
+//        return provider;
+//    }
+//    public void setProvider(AuthProvider provider) {
+//        this.provider = provider;
+//    }
+    public float getAvgDrivingScore() {return avgDrivingScore;}
+    public void setAvgDrivingScore(float avgDrivingScore) {this.avgDrivingScore = avgDrivingScore;}
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

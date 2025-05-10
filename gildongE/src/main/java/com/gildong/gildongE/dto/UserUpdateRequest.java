@@ -2,7 +2,7 @@ package com.gildong.gildongE.dto;
 
 public class UserUpdateRequest {
     private String userName;
-    private String password;
+//    private String password;
 
     public UserUpdateRequest() {}
 
@@ -12,10 +12,10 @@ public class UserUpdateRequest {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
+//    public String getPassword() {
+//        return password;
+//    }
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 }

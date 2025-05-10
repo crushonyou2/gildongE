@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
 public class Consumable {
     @Id
     private String id;
-    private String carId;
-    private float speed;
-    private float engineRpm;
-    private float throttlePosition;
-    private float engineLoad;
-    private float fuelTankLevel;
-    private float coolantTemp;
-    private String electricalSystem;
-    private boolean problemDetected;
+    private String userId;
+    private String carModel;
+    private String carNumber;
+    private String engineOilDate;
+    private String batteryDate;
+    private String coolantDate;
+    private String transmissionOilDate;
+    private String brakeOilDate;
+    private String airconFilterDate;
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 }

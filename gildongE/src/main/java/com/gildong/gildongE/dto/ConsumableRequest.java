@@ -1,78 +1,85 @@
 package com.gildong.gildongE.dto;
 
 public class ConsumableRequest {
-    private String carId;
-    private float speed;
-    private float engineRpm;
-    private float throttlePosition;
-    private float engineLoad;
-    private float fuelTankLevel;
-    private float coolantTemp;
-    private String electricalSystem;
-    private boolean problemDetected;
+    private String userId;
+    private String carModel;
+    private String carNumber;
+    private String engineOilDate;
+    private String batteryDate;
+    private String coolantDate;
+    private String transmissionOilDate;
+    private String brakeOilDate;
+    private String airconFilterDate;
 
-    public ConsumableRequest() {}
-
-    public String getCarId() {
-        return carId;
-    }
-    public void setCarId(String carId) {
-        this.carId = carId;
+    public String getUserId() {
+        return userId;
     }
 
-    public float getSpeed() {
-        return speed;
-    }
-    public void setSpeed(float speed) {
-        this.speed = speed;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public float getEngineRpm() {
-        return engineRpm;
-    }
-    public void setEngineRpm(float engineRpm) {
-        this.engineRpm = engineRpm;
+    public String getCarModel() {
+        return carModel;
     }
 
-    public float getThrottlePosition() {
-        return throttlePosition;
-    }
-    public void setThrottlePosition(float throttlePosition) {
-        this.throttlePosition = throttlePosition;
+    public void setCarModel(String carModel) {
+        this.carModel = carModel;
     }
 
-    public float getEngineLoad() {
-        return engineLoad;
-    }
-    public void setEngineLoad(float engineLoad) {
-        this.engineLoad = engineLoad;
+    public String getCarNumber() {
+        return carNumber;
     }
 
-    public float getFuelTankLevel() {
-        return fuelTankLevel;
-    }
-    public void setFuelTankLevel(float fuelTankLevel) {
-        this.fuelTankLevel = fuelTankLevel;
+    public void setCarNumber(String carNumber) {
+        this.carNumber = carNumber;
     }
 
-    public float getCoolantTemp() {
-        return coolantTemp;
-    }
-    public void setCoolantTemp(float coolantTemp) {
-        this.coolantTemp = coolantTemp;
+    public String getEngineOilDate() {
+        return engineOilDate;
     }
 
-    public String getElectricalSystem() {
-        return electricalSystem;
-    }
-    public void setElectricalSystem(String electricalSystem) {
-        this.electricalSystem = electricalSystem;
+    public void setEngineOilDate(String engineOilDate) {
+        this.engineOilDate = engineOilDate;
     }
 
-    public boolean isProblemDetected() {
-        return problemDetected;
+    public String getBatteryDate() {
+        return batteryDate;
     }
-    public void setProblemDetected(boolean problemDetected) {
-        this.problemDetected = problemDetected;
+
+    public void setBatteryDate(String batteryDate) {
+        this.batteryDate = batteryDate;
+    }
+
+    public String getCoolantDate() {
+        return coolantDate;
+    }
+
+    public void setCoolantDate(String coolantDate) {
+        this.coolantDate = coolantDate;
+    }
+
+    public String getTransmissionOilDate() {
+        return transmissionOilDate;
+    }
+
+    public void setTransmissionOilDate(String transmissionOilDate) {
+        this.transmissionOilDate = transmissionOilDate;
+    }
+
+    public String getBrakeOilDate() {
+        return brakeOilDate;
+    }
+
+    public void setBrakeOilDate(String brakeOilDate) {
+        this.brakeOilDate = brakeOilDate;
+    }
+
+    public String getAirconFilterDate() {
+        return airconFilterDate;
+    }
+
+    public void setAirconFilterDate(String airconFilterDate) {
+        this.airconFilterDate = airconFilterDate;
     }
 }

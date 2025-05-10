@@ -8,11 +8,11 @@ import com.gildong.gildongE.model.AuthProvider;
 import java.time.LocalDateTime;
 
 @Data
-@Document(collection = "users")
-public class User {
+@Document(collection = "driving_pattern")
+public class DrivingPattern {
     @Id
     private String id;
-    private String userName;
-    private float avgDrivingScore;
-    private LocalDateTime createdAt;
+    private String userId;
+    private float drivingScore;
+    private LocalDateTime recordedAt;
 }

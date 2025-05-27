@@ -9,36 +9,29 @@ public class UserResponse {
     private String loginId;
     private String userName;
     private float avgDrivingScore;
-
-//    private AuthProvider provider;
     private LocalDateTime createdAt;
+
+    private AuthProvider provider;
 
     public UserResponse() {}
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
+    // Getters & Setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public String getLoginId() {return loginId;}
-    public void setLoginId(String loginId) {this.loginId = loginId;}
+    public String getLoginId() { return loginId; }
+    public void setLoginId(String loginId) { this.loginId = loginId; }
 
-    public String getUserName() {
-        return userName;
-    }
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+    public String getUserName() { return userName; }
+    public void setUserName(String userName) { this.userName = userName; }
 
-    public float getAvgDrivingScore() {return avgDrivingScore;}
-    public void setAvgDrivingScore(float avgDrivingScore) {this.avgDrivingScore = avgDrivingScore;}
+    public float getAvgDrivingScore() { return avgDrivingScore; }
+    public void setAvgDrivingScore(float avgDrivingScore) { this.avgDrivingScore = avgDrivingScore; }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public AuthProvider getProvider() { return provider; }
+    public void setProvider(AuthProvider provider) { this.provider = provider; }
+
 }

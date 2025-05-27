@@ -16,13 +16,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll()  // 모든 요청 허용
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()
                 )
-                .httpBasic();
-
+                .httpBasic();  // ← oauth2Login() 삭제
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

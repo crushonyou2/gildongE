@@ -4,6 +4,7 @@ import com.gildong.gildongE.dto.UserCreateRequest;
 import com.gildong.gildongE.dto.UserResponse;
 import com.gildong.gildongE.dto.UserUpdateRequest;
 import com.gildong.gildongE.exception.ResourceNotFoundException;
+import com.gildong.gildongE.model.AuthProvider;
 import com.gildong.gildongE.model.DrivingPattern;
 import com.gildong.gildongE.model.User;
 import com.gildong.gildongE.repository.DrivingPatternRepository;
@@ -21,6 +22,7 @@ public class UserService {
     private final DrivingPatternRepository patternRepo;
     private final PasswordEncoder passwordEncoder;
 
+
     public UserService(UserRepository userRepo,
                        DrivingPatternRepository patternRepo,
                        PasswordEncoder passwordEncoder) {
@@ -33,10 +35,20 @@ public class UserService {
     public UserResponse createUser(UserCreateRequest req) {
         User u = new User();
         u.setLoginId(req.getLoginId());
-        u.setPassword(passwordEncoder.encode(req.getPassword()));
         u.setUserName(req.getUserName());
         u.setAvgDrivingScore(0f);
         u.setCreatedAt(LocalDateTime.now());
+
+        // 소셜 로그인/일반 회원가입 구분
+        u.setProvider(req.getProvider() != null ? req.getProvider() : AuthProvider.LOCAL);
+
+        // null 비밀번호 처리 (소셜 로그인용)
+        if (req.getPassword() != null) {
+            u.setPassword(passwordEncoder.encode(req.getPassword()));
+        } else {
+            u.setPassword(null);
+        }
+
         User saved = userRepo.save(u);
         return toResponse(saved);
     }
@@ -84,13 +96,14 @@ public class UserService {
         userRepo.save(u);
     }
 
-    private UserResponse toResponse(User u) {
+    public UserResponse toResponse(User u) {
         UserResponse dto = new UserResponse();
         dto.setId(u.getId());
         dto.setLoginId(u.getLoginId());
         dto.setUserName(u.getUserName());
         dto.setAvgDrivingScore(u.getAvgDrivingScore());
         dto.setCreatedAt(u.getCreatedAt());
+        dto.setProvider(u.getProvider());
         return dto;
     }
 }

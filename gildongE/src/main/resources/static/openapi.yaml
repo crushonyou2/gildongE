@@ -62,9 +62,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
   /api/auth/kakao/callback:
     get:
-      tags: [ Users ]
+      tags: [Users]
       summary: 카카오 로그인 (인가 코드 기반)
       parameters:
         - name: code
@@ -98,8 +99,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-
-
 
   /api/users/{userId}:
     get:
@@ -218,6 +217,33 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/patterns/user/{userId}/weekly-averages:
+    get:
+      tags: [DrivingPatterns]
+      summary: 사용자별 주(週) 단위 운전 점수 평균 조회
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 고유 ID
+      responses:
+        "200":
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WeeklyAverageResponse"
+        "404":
+          description: 사용자 없음
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/consumables:
     post:
       tags: [Consumables]
@@ -251,7 +277,7 @@ paths:
   /api/consumables/user/{userId}:
     get:
       tags: [Consumables]
-      summary: 사용자별 소모품 내역 조회
+      summary: 사용자별 소모품 내역 조회 (최신순)
       parameters:
         - name: userId
           in: path
@@ -275,6 +301,34 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/consumables/user/{userId}/overview:
+    get:
+      tags: [Consumables]
+      summary: 전체 소모품 내역 + 다음 교체 예정일 조회
+      description: |
+        - `all`: 최신순으로 정렬된 전체 소모품 내역
+        - `nextDueDate`: 가장 가까운(미래) 교체 예정일 (YYYYMMDD) 또는 `null`
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 고유 ID
+      responses:
+        "200":
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConsumablesOverviewResponse"
+        "404":
+          description: 사용자 없음
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     ErrorResponse:
@@ -287,12 +341,22 @@ components:
           type: string
           description: 에러 메시지
 
+    AuthProvider:
+      type: string
+      description: 로그인 제공자
+      enum:
+        - LOCAL
+        - KAKAO
+        - GOOGLE
+        - NAVER
+
     UserCreateRequest:
       type: object
       required:
         - loginId
         - password
         - userName
+        - provider
       properties:
         loginId:
           type: string
@@ -303,6 +367,9 @@ components:
         userName:
           type: string
           description: 실명
+        provider:
+          $ref: "#/components/schemas/AuthProvider"
+          description: 로그인 제공자 (LOCAL 또는 Social)
 
     LoginRequest:
       type: object
@@ -350,9 +417,8 @@ components:
           format: date-time
           description: 생성 시각
         provider:
-          type: string
-          description:
-          로그인 제공자 (예: KAKAO)
+          $ref: "#/components/schemas/AuthProvider"
+          description: 로그인 제공자
 
     DrivingPatternRequest:
       type: object
@@ -385,6 +451,18 @@ components:
           type: string
           format: date-time
           description: 기록 시각
+
+    WeeklyAverageResponse:
+      type: object
+      properties:
+        weekStart:
+          type: string
+          format: date
+          description: 해당 주의 시작일 (월요일, YYYY-MM-DD)
+        averageScore:
+          type: number
+          format: float
+          description: 그 주의 평균 운전 점수
 
     ConsumableRequest:
       type: object
@@ -462,3 +540,14 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    ConsumablesOverviewResponse:
+      type: object
+      properties:
+        all:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConsumableResponse"
+        nextDueDate:
+          type: string
+          description: 가장 가까운(미래) 교체 예정일 (YYYYMMDD) 또는 null

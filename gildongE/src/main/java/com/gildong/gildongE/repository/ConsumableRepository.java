@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ConsumableRepository extends MongoRepository<Consumable, String> {
     List<Consumable> findByUserId(String userId);
+    List<Consumable> findByUserIdOrderByCreatedAtDesc(String userId);
 }

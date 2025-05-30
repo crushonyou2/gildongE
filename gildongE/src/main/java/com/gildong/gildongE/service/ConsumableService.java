@@ -44,12 +44,22 @@ public class ConsumableService {
         e.setTransmissionOilDate(req.getTransmissionOilDate());
         e.setBrakeOilDate(req.getBrakeOilDate());
         e.setAirconFilterDate(req.getAirconFilterDate());
+
+        // 교체한 날짜도 저장
+        e.setEngineOilChangedDate(req.getEngineOilChangedDate());
+        e.setBatteryChangedDate(req.getBatteryChangedDate());
+        e.setCoolantChangedDate(req.getCoolantChangedDate());
+        e.setTransmissionOilChangedDate(req.getTransmissionOilChangedDate());
+        e.setBrakeOilChangedDate(req.getBrakeOilChangedDate());
+        e.setAirconFilterChangedDate(req.getAirconFilterChangedDate());
+
         e.setCreatedAt(LocalDateTime.now());
         e.setUpdatedAt(LocalDateTime.now());
 
         Consumable saved = consumableRepo.save(e);
         return toResponse(saved);
     }
+
 
     /** 사용자별 소모품 내역 조회 */
     public List<ConsumableResponse> listConsumables(String userId) {
@@ -104,8 +114,18 @@ public class ConsumableService {
         dto.setTransmissionOilDate(e.getTransmissionOilDate());
         dto.setBrakeOilDate(e.getBrakeOilDate());
         dto.setAirconFilterDate(e.getAirconFilterDate());
+
+        // 교체한 날짜도 포함
+        dto.setEngineOilChangedDate(e.getEngineOilChangedDate());
+        dto.setBatteryChangedDate(e.getBatteryChangedDate());
+        dto.setCoolantChangedDate(e.getCoolantChangedDate());
+        dto.setTransmissionOilChangedDate(e.getTransmissionOilChangedDate());
+        dto.setBrakeOilChangedDate(e.getBrakeOilChangedDate());
+        dto.setAirconFilterChangedDate(e.getAirconFilterChangedDate());
+
         dto.setCreatedAt(e.getCreatedAt());
         dto.setUpdatedAt(e.getUpdatedAt());
         return dto;
     }
+
 }

@@ -12,9 +12,13 @@ import com.gildong.gildongE.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.gildong.gildongE.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class UserService {
@@ -106,4 +110,11 @@ public class UserService {
         dto.setProvider(u.getProvider());
         return dto;
     }
+
+    public User getUserByUserName(String userName) {
+        return userRepo.findByUserName(userName)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userName));
+    }
+
+
 }

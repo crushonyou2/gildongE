@@ -34,6 +34,14 @@ public class DrivingPatternController {
         List<DrivingPatternResponse> list = patternService.listPatterns(userId);
         return ResponseEntity.ok(list);
     }
+    /** 사용자 이름으로 운전 기록 조회 */
+    @GetMapping("/username/{userName}")
+    public ResponseEntity<List<DrivingPatternResponse>> listByUserName(
+            @PathVariable String userName) {
+        List<DrivingPatternResponse> list = patternService.listPatternsByUserName(userName);
+        return ResponseEntity.ok(list);
+    }
+
 
     /** 사용자별 일주일 단위 평균 점수 목록 반환 */
     @GetMapping("/user/{userId}/weekly-averages")

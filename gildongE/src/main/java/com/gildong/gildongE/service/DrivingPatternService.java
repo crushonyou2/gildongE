@@ -5,6 +5,7 @@ import com.gildong.gildongE.dto.DrivingPatternResponse;
 import com.gildong.gildongE.dto.WeeklyAverageResponse;
 import com.gildong.gildongE.exception.ResourceNotFoundException;
 import com.gildong.gildongE.model.DrivingPattern;
+import com.gildong.gildongE.model.User;
 import com.gildong.gildongE.repository.DrivingPatternRepository;
 import org.springframework.stereotype.Service;
 
@@ -97,4 +98,15 @@ public class DrivingPatternService {
         dto.setRecordedAt(e.getRecordedAt());
         return dto;
     }
+    public List<DrivingPatternResponse> listPatternsByUserName(String userName) {
+        // userName으로 User 객체 찾기
+        User user = userService.getUserByUserName(userName);
+
+        // userId 기준으로 운전 패턴 조회
+        return patternRepo.findByUserId(user.getId())
+                .stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
 }

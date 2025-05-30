@@ -219,6 +219,33 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
+  /api/patterns/username/{userName}:
+    get:
+      tags: [DrivingPatterns]
+      summary: 사용자 이름 기준 운전 패턴 조회
+      parameters:
+        - name: userName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 사용자 이름 (userName)
+      responses:
+        "200":
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DrivingPatternResponse"
+        "404":
+          description: 사용자 없음
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /api/patterns/user/{userId}/weekly-averages:
     get:
       tags: [DrivingPatterns]

@@ -29,6 +29,7 @@ public class KakaoOAuthService {
     private final String redirectUri = "http://13.125.234.150:8080/api/auth/kakao/callback";
 
     public UserResponse kakaoLogin(String code) throws Exception {
+        // 1. 액세스 토큰 요청
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", clientId);
@@ -42,25 +43,32 @@ public class KakaoOAuthService {
         String tokenResponse = restTemplate.postForObject("https://kauth.kakao.com/oauth/token", request, String.class);
         String accessToken = objectMapper.readTree(tokenResponse).get("access_token").asText();
 
+        // 2. 사용자 정보 요청
         HttpHeaders userHeaders = new HttpHeaders();
         userHeaders.set("Authorization", "Bearer " + accessToken);
         HttpEntity<?> userRequest = new HttpEntity<>(userHeaders);
 
         String userInfoResponse = restTemplate.postForObject("https://kapi.kakao.com/v2/user/me", userRequest, String.class);
         JsonNode userJson = objectMapper.readTree(userInfoResponse);
-        String email = userJson.get("kakao_account").get("email").asText();
+
+        // 3. 고유 Kakao ID 기반 loginId 생성
+        String kakaoId = userJson.get("id").asText();
+        String loginId = "kakao_" + kakaoId + "@kakao.com";
+
         String nickname = userJson.get("properties").get("nickname").asText();
 
-        Optional<User> existingUser = userRepository.findByLoginId(email);
+        // 4. 기존 유저 존재 확인
+        Optional<User> existingUser = userRepository.findByLoginId(loginId);
         if (existingUser.isPresent()) {
             return userService.toResponse(existingUser.get());
         }
 
+        // 5. 신규 유저 저장
         User newUser = new User();
-        newUser.setLoginId(email);
+        newUser.setLoginId(loginId);
         newUser.setUserName(nickname);
         newUser.setPassword(null);
-        newUser.setEmail(email);
+        newUser.setEmail(null);  // email은 null 처리 또는 모델에서 nullable 처리
         newUser.setProvider(AuthProvider.KAKAO);
         newUser.setCreatedAt(LocalDateTime.now());
 

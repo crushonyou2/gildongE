@@ -585,11 +585,44 @@ components:
           pattern: '^[0-9]{8}$'
           nullable: true
           description: 브레이크 오일 교체 예정일 (YYYYMMDD)
-        washerFluidDate:
+        airconFilterDate:
           type: string
           pattern: '^[0-9]{8}$'
           nullable: true
-          description: 워셔 액 교체 예정일 (YYYYMMDD)
+          description: 에어컨 필터 교체 예정일 (YYYYMMDD)
+        engineOilChangedDate:
+          type: string
+          pattern: '^[0-9]{8}$'
+          nullable: true
+          description: 엔진 오일 교체 완료일 (YYYYMMDD)
+        batteryChangedDate:
+          type: string
+          pattern: '^[0-9]{8}$'
+          nullable: true
+          description: 배터리 교체 완료일 (YYYYMMDD)
+        coolantChangedDate:
+          type: string
+          pattern: '^[0-9]{8}$'
+          nullable: true
+          description: 부동액 교체 완료일 (YYYYMMDD)
+        transmissionOilChangedDate:
+          type: string
+          pattern: '^[0-9]{8}$'
+          nullable: true
+          description: 변속기 오일 교체 완료일 (YYYYMMDD)
+        brakeOilChangedDate:
+          type: string
+          pattern: '^[0-9]{8}$'
+          nullable: true
+          description: 브레이크 오일 교체 완료일 (YYYYMMDD)
+        airconFilterChangedDate:
+          type: string
+          pattern: '^[0-9]{8}$'
+          nullable: true
+          description: 에어컨 필터 교체 완료일 (YYYYMMDD)
+
+
+
 
     ConsumableResponse:
       type: object
@@ -613,14 +646,34 @@ components:
           type: string
         brakeOilDate:
           type: string
-        washerFluidDate:
+        airconFilterDate:
           type: string
+        engineOilChangedDate:
+          type: string
+          description: 엔진 오일 교체 완료일
+        batteryChangedDate:
+          type: string
+          description: 배터리 교체 완료일
+        coolantChangedDate:
+          type: string
+          description: 부동액 교체 완료일
+        transmissionOilChangedDate:
+          type: string
+          description: 변속기 오일 교체 완료일
+        brakeOilChangedDate:
+          type: string
+          description: 브레이크 오일 교체 완료일
+        airconFilterChangedDate:
+          type: string
+          description: 에어컨 필터 교체 완료일
+
         createdAt:
           type: string
           format: date-time
         updatedAt:
           type: string
           format: date-time
+
 
     ConsumablesOverviewResponse:
       type: object

@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.gildong.gildongE.model.AuthProvider;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     private String id;
+    @Field("loginId")
     private String loginId;
     private String password;
     private String userName;

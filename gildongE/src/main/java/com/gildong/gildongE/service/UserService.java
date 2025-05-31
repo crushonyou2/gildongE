@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.gildong.gildongE.repository.UserRepository;
@@ -66,8 +67,8 @@ public class UserService {
 
     /** 로그인용 조회 */
     public User getByLoginId(String loginId) {
-        return userRepo.findByLoginId(loginId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", loginId));
+        Optional<User> userOpt = userRepo.findByLoginId(loginId);
+        return userOpt.orElseThrow(() -> new ResourceNotFoundException("User", loginId));
     }
 
     /** 사용자 이름/비밀번호 수정 */
@@ -116,5 +117,9 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User", userName));
     }
 
+    public UserResponse getByLoginIdAsResponse(String loginId) {
+        User user = getByLoginId(loginId);
+        return toResponse(user);
+    }
 
 }

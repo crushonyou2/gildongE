@@ -40,6 +40,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: 중복된 loginId
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   /api/users/login:
     post:
@@ -60,6 +66,31 @@ paths:
                 $ref: "#/components/schemas/UserResponse"
         "401":
           description: 인증 실패 (아이디 또는 비밀번호 불일치)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/users/loginId:
+    get:
+      tags: [ Users ]
+      summary: loginId 기준 사용자 조회
+      parameters:
+        - name: loginId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 로그인용 아이디
+      responses:
+        "200":
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: 사용자 없음
           content:
             application/json:
               schema:
@@ -442,7 +473,7 @@ components:
     ErrorResponse:
       type: object
       properties:
-        code:
+        error:
           type: string
           description: 에러 코드
         message:

@@ -53,4 +53,12 @@ public class UserController {
         }
         return ResponseEntity.ok(userService.getUserById(u.getId()));
     }
+
+    /** loginId로 사용자 조회 */
+    @GetMapping("/loginId")
+    public ResponseEntity<UserResponse> getUserByLoginId(@RequestParam String loginId) {
+        return ResponseEntity.ok(userService.getByLoginIdAsResponse(loginId));
+    }
+
+
 }

@@ -7,6 +7,7 @@ import com.gildong.gildongE.model.AuthProvider;
 import com.gildong.gildongE.model.User;
 import com.gildong.gildongE.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -25,8 +26,11 @@ public class KakaoOAuthService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final String clientId = "dba02cfce15347e2fc158f42700ad854";
-    private final String redirectUri = "http://<redacted-ip>:8080/api/auth/kakao/callback";
+    @Value("${kakao.client-id}")
+    private String clientId;
+
+    @Value("${kakao.redirect-uri}")
+    private String redirectUri;
 
     public UserResponse kakaoLogin(String code) throws Exception {
         // 1. 액세스 토큰 요청

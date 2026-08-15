@@ -1,16 +1,37 @@
 # GildongE — AI 차량 어시스턴트 백엔드
 
-7인 팀으로 개발한 AI 차량 어시스턴트의 **Spring Boot·MongoDB 백엔드 저장소**입니다. 여러 장치와 앱에서 생성되는 차량·소모품·주행 데이터를 사용자 단위로 저장하고 조회할 수 있도록 도메인 API와 데이터 모델을 구현했습니다.
+**장치마다 형태가 다른 차량 데이터를 5개 도메인 REST API로 묶은 Spring Boot·MongoDB 백엔드**
 
-- 기간: 2025.03 ~ 2025.06
-- 담당: 백엔드·데이터베이스
-- 결과: 경기대학교 졸업 캡스톤 경연대회 은상, 2025 한국정보기술학회 하계 종합학술대회 논문 공저
+[![Award](https://img.shields.io/badge/2025%20캡스톤디자인%20경진대회-심화부문%20은상-C0C0C0)](#결과)
+[![Paper](https://img.shields.io/badge/한국정보기술학회-하계학술대회%20논문%20공저-blue)](#결과)
+[![Stack](https://img.shields.io/badge/Spring%20Boot%203-Java%2017-6DB33F?logo=springboot&logoColor=white)](#기술-선택)
+[![DB](https://img.shields.io/badge/MongoDB-document%20model-47A248?logo=mongodb&logoColor=white)](#설계-판단)
+
+7인 팀으로 개발한 AI 차량 어시스턴트에서 **백엔드와 데이터베이스를 담당한 저장소**입니다.
+졸음 감지 장치·모바일 앱·차량 관리 기능에서 제각각 발생하는 데이터를 사용자 단위로 저장하고,
+일관된 REST API로 제공하는 것이 맡은 문제였습니다.
+
+- **기간** 2025.03 ~ 2025.06 · **팀** 7인 · **담당** 백엔드·데이터베이스
 
 ![GildongE 프로젝트 포스터](gildongE_poster.jpg)
 
-## 맡은 문제
+---
 
-졸음 감지 장치, 모바일 앱, 차량 관리 기능에서 서로 다른 형태의 데이터가 발생했습니다. 백엔드는 이를 차량·소모품·주행패턴 도메인으로 나누어 저장하고, 사용자별 기록을 일관된 REST API로 제공해야 했습니다.
+## 결과
+
+- **2025 산학협력 캡스톤디자인 경진대회 심화캡스톤디자인 부문 은상** (경기대학교 소프트웨어중심대학)
+- **2025 한국정보기술학회 하계 종합학술대회 논문 공저**
+- 차량·차종·소모품·주행패턴·사용자 **5개 도메인 REST API**와 MongoDB 문서 모델 설계·구현
+- 요청·응답 계약과 오류 응답을 **OpenAPI 3.0 문서로 고정**
+
+## 해결한 문제
+
+차량 데이터는 **출처마다 형태가 다릅니다.** 졸음 감지 장치가 올리는 값, 앱에서 사용자가 입력하는 정비 기록,
+주행 중 누적되는 점수가 같은 스키마에 들어가지 않습니다. 관계형 테이블로 고정하면 장치나 기능이 하나 추가될 때마다
+스키마를 바꿔야 하고, 그렇다고 전부 한 컬렉션에 넣으면 조회가 무너집니다.
+
+**도메인 경계로 나누고 문서 모델로 수용하는 쪽**을 택했습니다. 차량·차종·소모품·주행패턴·사용자를 각각의 도메인으로
+분리해 저장 형태가 달라도 서로 영향을 주지 않게 하고, 앱에는 도메인별 REST API로 일관된 형태만 노출했습니다.
 
 ## 구현 범위
 
@@ -18,24 +39,47 @@
 |---|---|---|
 | 차량 | 차량·차종 등록, 조회, 수정, 삭제 | `controller/CarController`, `CarModelController` |
 | 소모품 | 소모품 정보와 교체 예정일 관리 | `controller/ConsumableController` |
-| 주행패턴 | 주행 점수 기록·조회, 사용자별 주간 평균 집계 | `DrivingPatternService`, `WeeklyAverageResponse` |
+| 주행패턴 | 주행 점수 기록·조회, **사용자별 주간 평균 집계** | `DrivingPatternService`, `WeeklyAverageResponse` |
 | 사용자 | 사용자 등록·조회·수정 | `UserController`, `UserService` |
 | 카카오 로그인 | 인가 코드를 액세스 토큰으로 교환하고 카카오 사용자를 조회·등록 | `KakaoOAuthService`, `AuthController` |
 | API 문서 | 주요 요청·응답 스키마와 오류 응답 정리 | `src/main/resources/static/openapi.yaml` |
 
-## 역할 경계
+## 설계 판단
 
-전체 팀 시스템에는 졸음 감지와 차량 매뉴얼 기반 RAG 질의응답 컴포넌트가 포함됐습니다. **RAG 모델과 검색 파이프라인은 팀의 별도 컴포넌트이며 이 저장소에는 포함되지 않습니다.** 이 저장소가 증명하는 제 기여 범위는 차량 도메인 백엔드와 MongoDB 모델, 사용자·카카오 로그인 흐름, 주행 데이터 집계입니다.
+### MongoDB 문서 모델
 
-현재 프로토타입은 카카오 사용자 조회·등록 흐름까지 구현돼 있지만 JWT를 발급하지 않으며, `SecurityConfig`의 API 접근 제어도 전체 허용 상태입니다. 운영 환경이라면 토큰 기반 인증과 사용자별 인가 정책을 추가해야 합니다.
+장치와 기능별로 필드가 달라질 수 있는 차량 데이터를 수용하려고 문서형을 골랐습니다.
+스키마 변경이 잦은 초기 프로토타입에서 **도메인 추가 비용을 낮추는 쪽**을 우선했습니다.
 
-## 기술 선택
+### 집계는 API가 책임진다
 
-- **Spring Boot / Java 17**: 도메인별 REST API 구성
-- **MongoDB**: 장치와 기능별로 형태가 달라질 수 있는 차량 데이터 수용
-- **Spring Data MongoDB**: Repository 기반 데이터 접근
-- **Kakao OAuth API**: 인가 코드 기반 사용자 확인
-- **OpenAPI 3.0**: API 요청·응답 계약 문서화
+주행 점수는 기록만 쌓고 앱이 계산하게 두면 클라이언트마다 값이 달라집니다.
+**사용자별 주간 평균 집계를 서버에서 계산해** 하나의 응답 형태로 내려보냈습니다.
+
+### 계약을 문서로 고정
+
+7인 팀이라 프론트·장치 쪽과 필드 이름 하나로도 어긋납니다.
+OpenAPI 3.0으로 요청·응답과 오류 응답을 적어 두고 그것을 기준으로 맞췄습니다.
+
+## 이 저장소가 증명하는 범위
+
+팀 전체 시스템에는 졸음 감지와 차량 매뉴얼 기반 RAG 질의응답 컴포넌트가 포함됩니다.
+**RAG 모델과 검색 파이프라인은 팀의 별도 컴포넌트이며 이 저장소에 포함되지 않습니다.**
+여기서 확인할 수 있는 제 기여 범위는 **차량 도메인 백엔드, MongoDB 문서 모델, 사용자·카카오 로그인 흐름,
+주행 데이터 집계**입니다.
+
+> RAG를 직접 구축한 사례는 [benefit-compass](https://github.com/crushonyou2/benefit-compass)에 있습니다 —
+> 임베딩·벡터검색·리랭킹·생성을 직접 구성하고 60문항 평가셋으로 검색 품질을 측정했습니다.
+
+## 기술 스택
+
+| 영역 | 기술 |
+|---|---|
+| 언어·프레임워크 | Java 17, Spring Boot 3 |
+| 데이터 | MongoDB, Spring Data MongoDB |
+| 인증 연동 | Kakao OAuth API |
+| 문서화 | OpenAPI 3.0 |
+| 배포 환경 | AWS EC2 |
 
 ## 실행
 
@@ -47,18 +91,21 @@ KAKAO_CLIENT_ID=...
 KAKAO_REDIRECT_URI=http://localhost:8080/api/auth/kakao/callback
 ```
 
-실행 명령:
-
 ```bash
 cd gildongE
 ./gradlew bootRun
 ```
 
-API 문서는 `gildongE/src/main/resources/static/openapi.yaml`에서 확인할 수 있습니다.
+API 문서: `gildongE/src/main/resources/static/openapi.yaml`
 
-## 개발자
+## 범위와 조건
 
-**Jigwan Joe — Backend Developer**
+- **학기 프로젝트 프로토타입입니다.** 카카오 사용자 조회·등록까지 구현했고 JWT 발급과 사용자별 인가 정책은 넣지 않았습니다(`SecurityConfig` 전체 허용). 운영 환경이라면 토큰 기반 인증이 선행되어야 합니다.
+- 성능·부하 지표는 측정하지 않았습니다. 측정한 수치가 있는 프로젝트는 위 benefit-compass와 [Fridge-D-Day](https://github.com/crushonyou2/Fridge-D-Day)입니다.
 
-- GitHub: https://github.com/crushonyou2
+## 만든 사람
+
+**Jigwan Joe** — Backend
+
+- GitHub: [@crushonyou2](https://github.com/crushonyou2)
 - Email: jigwan.joe@gmail.com

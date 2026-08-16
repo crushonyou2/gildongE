@@ -101,7 +101,8 @@ API 문서: `gildongE/src/main/resources/static/openapi.yaml`
 
 - **학기 프로젝트 프로토타입입니다.** 카카오 사용자 조회·등록까지 구현했고 JWT 발급과 사용자별 인가 정책은 넣지 않았습니다(`SecurityConfig` 전체 허용). 운영 환경이라면 토큰 기반 인증이 선행되어야 합니다.
 - 성능·부하 지표는 측정하지 않았습니다.
-- 이 저장소에는 배포 설정이 없습니다. 실행은 로컬 기준이고, 팀 시연 환경 구성은 저장소 밖에서 이뤄졌습니다. 측정한 수치가 있는 프로젝트는 위 benefit-compass와 [Fridge-D-Day](https://github.com/crushonyou2/Fridge-D-Day)입니다.
+- 이 저장소에는 배포 설정이 없습니다. 실행은 로컬 기준이고, 팀 시연 환경 구성은 저장소 밖에서 이뤄졌습니다.
+- 측정한 수치가 있는 프로젝트는 위 benefit-compass와 [Fridge-D-Day](https://github.com/crushonyou2/Fridge-D-Day)입니다.
 
 ## 만든 사람
 

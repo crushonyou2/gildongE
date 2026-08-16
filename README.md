@@ -71,6 +71,9 @@ OpenAPI 3.0으로 요청·응답과 오류 응답을 적어 두고 그것을 기
 > RAG를 직접 구축한 사례는 [benefit-compass](https://github.com/crushonyou2/benefit-compass)에 있습니다 —
 > 임베딩·벡터검색·리랭킹·생성을 직접 구성하고 60문항 평가셋으로 검색 품질을 측정했습니다.
 
+> 이 백엔드에 **SSE 기반 실시간 알림**을 얹은 확장본은 별도 저장소
+> [gil_ALERT](https://github.com/crushonyou2/gil_ALERT)에 있습니다.
+
 ## 기술 스택
 
 | 영역 | 기술 |
